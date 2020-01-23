@@ -1,0 +1,18 @@
+{% from "_formhelpers.html" import render_field %}
+<html>
+<head>
+<title>wtf_edit_student</title>
+</head>
+<body>
+    {{ form.student_nick_names }}
+	<form method="POST" action="/wtf_edit_student">
+	   <dl>
+	    {{ form.csrf_token }}
+	    {{ render_field(form.name) }}
+	    {{ render_field(form.email) }}
+		{{ render_field(form.age) }}
+	    <input type="submit" value="Save Stud">
+	    </dl>
+	</form>
+</body>
+</html>

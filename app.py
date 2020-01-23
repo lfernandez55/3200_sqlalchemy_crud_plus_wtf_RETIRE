@@ -1,12 +1,17 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 
+#wtf forms
+from flask_wtf import Form
+from wtforms import StringField, PasswordField, validators, FieldList
+from wtforms.validators import InputRequired
+
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
 db = SQLAlchemy(app)
 
 
-# Define the Role data-model
+# Define the Role data-model a
 class Course(db.Model):
     __tablename__ = 'courses'
     id = db.Column(db.Integer(), primary_key=True)
@@ -198,3 +203,42 @@ def show_student_enrollments():
         courses = courses + str(course.name) +  ","
     message = "Joe is enrolled in:<br> " + courses
     return render_template('index.html', message=message)
+
+# class LoginForm(Form):
+# 	username = StringField('username', validators=[InputRequired()])
+# 	password = PasswordField('password', validators=[InputRequired()])
+# 	foo = StringField('foo', validators=[InputRequired()])
+#
+# @app.route('/wtf', methods=['GET', 'POST'])
+# def wtf():
+# 	#form = LoginForm()
+# 	form = LoginForm(username="joe",foo="baz")
+# 	person = {'username': 'Johnny', 'password': 'pass', 'foo':'jon@weber.edu'}
+# 	form = LoginForm(data=person)
+# 	if form.validate_on_submit():
+# 		return 'Form Successfully Submitted!'
+# 	return render_template('wtf.html', form=form)
+
+class StudentForm(Form):
+    name = StringField('name', validators=[InputRequired()] )
+    email = StringField('email', [
+        validators.Length(min=6, message=(u'Little short for an email?')),
+        validators.Email(message=(u'That\'s not a valid email address.'))
+    ])
+    age = StringField('age', validators=[InputRequired()])
+    # student_nick_names = FieldList(StringField('Name'))
+
+@app.route('/wtf_edit_student/<int:student_id>', methods=['GET', 'POST'])
+def wtf_edit_student(student_id):
+    joe = Student.query.filter(Student.id == student_id).first()
+    print(joe.student_nick_names)
+    form = StudentForm(obj=joe)
+    if form.validate_on_submit():
+        form.populate_obj(joe)
+        db.session.add(joe)
+        db.session.commit()
+        return 'Yowza! Edit again? '
+    return render_template('wtf_edit_student.html', form=form)
+
+# TODO:  Make more basic validator not using jinja macro, do a form with a one to many relationship, fix error that is occuring when submitting form due to
+# submit url not matching route that contains param. Look at edit mary shelly code for fix

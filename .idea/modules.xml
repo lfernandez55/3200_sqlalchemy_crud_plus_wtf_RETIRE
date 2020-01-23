@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/3200_sqlalchemy_crud_app.iml" filepath="$PROJECT_DIR$/.idea/3200_sqlalchemy_crud_app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../flask-wtforms/.idea/flask-wtforms.iml" filepath="$PROJECT_DIR$/../flask-wtforms/.idea/flask-wtforms.iml" />
     </modules>
   </component>
 </project>
